@@ -6,9 +6,10 @@ type TodoCardProps = {
   id: string;
   title: string;
   description: string;
+  isCompleted: boolean;
 };
 
-const TodoCard = ({ id, title, description }: TodoCardProps) => {
+const TodoCard = ({ id, title, description, isCompleted }: TodoCardProps) => {
   const dispatch = useAppDispatch();
   return (
     <div className="bg-white rounded-md flex justify-between items-center p-3 border">
@@ -18,7 +19,7 @@ const TodoCard = ({ id, title, description }: TodoCardProps) => {
         id=""
       />
       <p className="font-semibold">{title}</p>
-      {/* <p>Time</p> */}
+      <div>{isCompleted ? <p className="text-green-500">Done</p> : <p className="text-red-500">Pending</p>}</div>
       <p>{description}</p>
       <div className="space-x-5">
         <Button
