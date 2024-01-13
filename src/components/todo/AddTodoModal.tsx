@@ -4,42 +4,57 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addTodo } from "@/redux/features/todoSlice";
+import { addTodo, updateTodos } from "@/redux/features/todoSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { FormEvent, useState } from "react";
+import TodoFilter from "./TodoFilter";
 
-export function AddTodoModal({ id }) {
+type TAddTodoModalProps = {
+  id: string | null;
+  modalTitle: string;
+  modalDescription: string;
+  children?: React.ReactNode;
+};
+
+export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAddTodoModalProps) {
   const [task, setTask] = useState("");
   const [description, setDescription] = useState("");
   const { todos } = useAppSelector((state) => state.todos);
+  const todo = todos?.find((item) => item.id === id);
+  const [priority, setPriority] = useState(todo?.priority || "low");
 
   const dispatch = useAppDispatch();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!id) {
-      const taskDetails = { title: task, description, id: Math.random().toString(32).substring(2, 7) };
+      const taskDetails = { title: task, description, id: Math.random().toString(32).substring(2, 7), priority };
       dispatch(addTodo(taskDetails));
     } else {
+      const taskDetails = { title: task, description, id, priority };
+      dispatch(updateTodos(taskDetails));
     }
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-primary-gradient text-xl  font-semibold">Add Todo</Button>
+        {!children ? (
+          <Button className="bg-primary-gradient text-xl  font-semibold">Add Todo</Button>
+        ) : (
+          <Button className="bg-[#5C53FE]">{children}</Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Task</DialogTitle>
-          <DialogDescription>Add your task that you want to do.</DialogDescription>
+          <DialogTitle>{modalTitle}</DialogTitle>
+          <DialogDescription>{modalDescription}</DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit}>
           <div className="grid gap-4 py-4">
@@ -52,6 +67,7 @@ export function AddTodoModal({ id }) {
               </Label>
               <Input
                 onBlur={(e) => setTask(e.target.value)}
+                defaultValue={todo?.title}
                 id="task"
                 className="col-span-3"
               />
@@ -65,10 +81,12 @@ export function AddTodoModal({ id }) {
               </Label>
               <Input
                 onBlur={(e) => setDescription(e.target.value)}
+                defaultValue={todo?.description}
                 id="description"
                 className="col-span-3"
               />
             </div>
+            <TodoFilter setPriority={setPriority} />
           </div>
           <div className="flex justify-end">
             <DialogClose asChild>

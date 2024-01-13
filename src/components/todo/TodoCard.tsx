@@ -1,15 +1,17 @@
 import { useAppDispatch } from "@/redux/hook";
 import { Button } from "../ui/button";
 import { removeTodo, toggleComplete } from "@/redux/features/todoSlice";
+import { AddTodoModal } from "./AddTodoModal";
 
 type TodoCardProps = {
   id: string;
   title: string;
   description: string;
   isCompleted?: boolean;
+  priority: string;
 };
 
-const TodoCard = ({ id, title, description, isCompleted }: TodoCardProps) => {
+const TodoCard = ({ id, title, description, isCompleted, priority }: TodoCardProps) => {
   const dispatch = useAppDispatch();
 
   const toggleState = () => {
@@ -26,6 +28,13 @@ const TodoCard = ({ id, title, description, isCompleted }: TodoCardProps) => {
       <p className="font-semibold">{title}</p>
       <div>{isCompleted ? <p className="text-green-500">Done</p> : <p className="text-red-500">Pending</p>}</div>
       <p>{description}</p>
+      <p
+        className={`${
+          priority === "high" ? "text-red-500" : priority === "medium" ? "text-yellow-500" : "text-green-500"
+        }`}
+      >
+        {priority} Priority
+      </p>
       <div className="space-x-5">
         <Button
           onClick={() => dispatch(removeTodo(id))}
@@ -46,7 +55,11 @@ const TodoCard = ({ id, title, description, isCompleted }: TodoCardProps) => {
             />
           </svg>
         </Button>
-        <Button className="bg-[#5C53FE]">
+        <AddTodoModal
+          id={id}
+          modalTitle="Edit Todo"
+          modalDescription="Edit todo as you want..."
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -61,7 +74,7 @@ const TodoCard = ({ id, title, description, isCompleted }: TodoCardProps) => {
               d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
             />
           </svg>
-        </Button>
+        </AddTodoModal>
       </div>
     </div>
   );

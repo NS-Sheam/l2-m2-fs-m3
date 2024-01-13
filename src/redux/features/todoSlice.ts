@@ -3,6 +3,7 @@ type TTodo = {
   id: string;
   title: string;
   description: string;
+  priority: string;
   isCompleted?: boolean;
 };
 
@@ -37,11 +38,12 @@ const todoSlice = createSlice({
       if (existingTodo) {
         existingTodo.title = action.payload.title;
         existingTodo.description = action.payload.description;
+        existingTodo.priority = action.payload.priority;
       }
     },
   },
 });
 
-export const { addTodo, removeTodo, toggleComplete } = todoSlice.actions;
+export const { addTodo, removeTodo, toggleComplete, updateTodos } = todoSlice.actions;
 
 export default todoSlice.reducer;

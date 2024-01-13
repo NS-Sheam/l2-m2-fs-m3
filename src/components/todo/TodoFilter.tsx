@@ -10,7 +10,11 @@ import {
 import { useState } from "react";
 import { Button } from "../ui/button";
 
-const TodoFilter = () => {
+type TodoFilterProps = {
+  setPriority: React.Dispatch<React.SetStateAction<string>>;
+};
+
+const TodoFilter = ({ setPriority }: TodoFilterProps) => {
   const [position, setPosition] = useState("bottom");
   return (
     <DropdownMenu>
@@ -24,9 +28,24 @@ const TodoFilter = () => {
           value={position}
           onValueChange={setPosition}
         >
-          <DropdownMenuRadioItem value="high">High</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="medium">Medium</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="low">Low</DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            onClick={() => setPriority("high")}
+            value="high"
+          >
+            High
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            onClick={() => setPriority("medium")}
+            value="medium"
+          >
+            Medium
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem
+            onClick={() => setPriority("low")}
+            value="low"
+          >
+            Low
+          </DropdownMenuRadioItem>
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
