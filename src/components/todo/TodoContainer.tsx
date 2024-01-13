@@ -6,7 +6,7 @@ import { useState } from "react";
 
 const TodoContainer = () => {
   const { todos } = useAppSelector((state) => state.todos);
-  const [priority, setPriority] = useState("low");
+  const [priority, setPriority] = useState("high");
   return (
     <div>
       <div className="flex justify-between mb-5">
