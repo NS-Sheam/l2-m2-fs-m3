@@ -7,6 +7,8 @@ import { useState } from "react";
 const TodoContainer = () => {
   const { todos } = useAppSelector((state) => state.todos);
   const [priority, setPriority] = useState("high");
+  const priorityTask = todos?.filter((item) => item.priority === priority);
+  const remainingTask = todos?.filter((item) => item.priority !== priority);
   return (
     <div>
       <div className="flex justify-between mb-5">
@@ -18,26 +20,24 @@ const TodoContainer = () => {
         <TodoFilter setPriority={setPriority} />
       </div>
       <div className="bg-primary-gradient w-full h-full rounded-xl p-[5px]">
-        {/* <div className="bg-white p-5 text-2xl font-bold flex justify-center items-center">
-          <p>There is no task pending</p>
-        </div> */}
+        {!todos?.length && (
+          <div className="bg-white p-5 text-2xl font-bold flex justify-center items-center">
+            <p>There is no task pending</p>
+          </div>
+        )}
         <div className="bg-white p-5 w-full h-full rounded-xl space-y-3">
-          {todos
-            .filter((item) => item.priority === priority)
-            .map((item) => (
-              <TodoCard
-                key={item.id}
-                {...item}
-              />
-            ))}
-          {todos
-            .filter((item) => item.priority !== priority)
-            .map((item) => (
-              <TodoCard
-                key={item.id}
-                {...item}
-              />
-            ))}
+          {priorityTask?.map((item) => (
+            <TodoCard
+              key={item.id}
+              {...item}
+            />
+          ))}
+          {remainingTask?.map((item) => (
+            <TodoCard
+              key={item.id}
+              {...item}
+            />
+          ))}
         </div>
       </div>
     </div>
