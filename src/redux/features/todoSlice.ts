@@ -27,6 +27,17 @@ const todoSlice = createSlice({
     toggleComplete: (state, action: PayloadAction<string>) => {
       const task = state.todos.find((todo) => todo.id === action.payload);
       task!.isCompleted = !task?.isCompleted;
+
+      const remainingTasks = state.todos.filter((todo) => todo.id !== action.payload);
+      task!.isCompleted ? remainingTasks.push(task!) : remainingTasks.unshift(task!);
+      state.todos = remainingTasks;
+    },
+    updateTodos: (state, action: PayloadAction<TTodo>) => {
+      const existingTodo = state.todos.find((todo) => todo.id === action.payload.id);
+      if (existingTodo) {
+        existingTodo.title = action.payload.title;
+        existingTodo.description = action.payload.description;
+      }
     },
   },
 });
