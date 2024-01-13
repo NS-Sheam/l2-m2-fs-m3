@@ -7,10 +7,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import React from "react";
+import { useState } from "react";
 import { Button } from "../ui/button";
 
 const TodoFilter = () => {
+  const [position, setPosition] = useState("bottom");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

@@ -1,15 +1,21 @@
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@radix-ui/react-dialog";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-import { Button } from "../ui/button";
-import { DialogFooter, DialogHeader } from "../ui/dialog";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-
-const AddTodoModal = () => {
+export function AddTodoModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit Profile</Button>
+        <Button className="bg-primary-gradient text-xl  font-semibold">Add Todo</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -50,6 +56,4 @@ const AddTodoModal = () => {
       </DialogContent>
     </Dialog>
   );
-};
-
-export default AddTodoModal;
+}
