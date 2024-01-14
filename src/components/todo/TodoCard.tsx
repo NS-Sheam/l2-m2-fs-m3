@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 
 import { AddTodoModal } from "./AddTodoModal";
-import { useUpdateTodoMutation } from "@/redux/api/api";
+import { useDeleteTodoMutation, useUpdateTodoMutation } from "@/redux/api/api";
 
 type TodoCardProps = {
   _id: string;
@@ -14,6 +14,7 @@ type TodoCardProps = {
 const TodoCard = ({ _id, title, description, isCompleted, priority }: TodoCardProps) => {
   // const dispatch = useAppDispatch();
   const [updateTodo] = useUpdateTodoMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
   const toggleState = () => {
     const taskData = { title, description, isCompleted: !isCompleted, priority };
     const options = { id: _id, data: taskData };
@@ -53,7 +54,7 @@ const TodoCard = ({ _id, title, description, isCompleted, priority }: TodoCardPr
       <p className="flex-[2]">{description}</p>
       <div className="space-x-5">
         <Button
-          // onClick={() => dispatch(removeTodo(id))}
+          onClick={() => deleteTodo(_id)}
           className="bg-red-500"
         >
           <svg

@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // import { addTodo, updateTodos } from "@/redux/features/todoSlice";
 import { FormEvent, useState } from "react";
-import { TTodo, useAddTodoMutation, useGetTodosQuery } from "@/redux/api/api";
+import { TTodo, useAddTodoMutation, useGetTodosQuery, useUpdateTodoMutation } from "@/redux/api/api";
 import { Select, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { SelectContent, SelectLabel } from "@radix-ui/react-select";
 
@@ -32,6 +32,7 @@ export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAd
   const todos: TTodo[] = data?.data;
   // From server
   const [addTodo] = useAddTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
 
   const todo = todos?.find((item) => item._id === id);
 
@@ -47,6 +48,16 @@ export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAd
       // dispatch(addTodo(taskDetails));
       // For server
       addTodo(taskDetails);
+    } else {
+      updateTodo({
+        id,
+        data: {
+          title: task || todo?.title,
+          description: description || todo?.description,
+          priority: priority || todo?.priority,
+          isCompleted: todo?.isCompleted,
+        },
+      });
     }
   };
 
@@ -94,10 +105,12 @@ export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAd
                 className="col-span-3"
               />
             </div>
-            {/* <TodoFilter setPriority={setPriority} /> */}
             <div className="grid grid-cols-4 items-center gap-4">
               <Label>Priority</Label>
-              <Select onValueChange={(value) => setPriority(value)}>
+              <Select
+                defaultValue={todo?.priority}
+                onValueChange={(value) => setPriority(value)}
+              >
                 <SelectTrigger className="col-span-3">
                   <SelectValue placeholder="Select a fruit" />
                 </SelectTrigger>
