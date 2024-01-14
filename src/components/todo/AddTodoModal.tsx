@@ -10,10 +10,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { addTodo, updateTodos } from "@/redux/features/todoSlice";
+// import { addTodo, updateTodos } from "@/redux/features/todoSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { FormEvent, useState } from "react";
 import TodoFilter from "./TodoFilter";
+import { useAddTodoMutation } from "@/redux/api/api";
+import { Select, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { SelectContent, SelectLabel } from "@radix-ui/react-select";
 
 type TAddTodoModalProps = {
   id: string | null;
@@ -25,20 +28,25 @@ type TAddTodoModalProps = {
 export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAddTodoModalProps) {
   const [task, setTask] = useState("");
   const [description, setDescription] = useState("");
+  // From local state
   const { todos } = useAppSelector((state) => state.todos);
-  const todo = todos?.find((item) => item.id === id);
-  const [priority, setPriority] = useState(todo?.priority || "low");
+  // From server
+  const [addTodo, { data, isError, isLoading, isSuccess }] = useAddTodoMutation();
+  console.log(data, isError, isLoading, isSuccess);
 
-  const dispatch = useAppDispatch();
+  const todo = todos?.find((item) => item.id === id);
+  const [priority, setPriority] = useState();
+
+  // const dispatch = useAppDispatch();
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!id) {
-      const taskDetails = { title: task, description, id: Math.random().toString(32).substring(2, 7), priority };
-      dispatch(addTodo(taskDetails));
-    } else {
-      const taskDetails = { title: task, description, id, priority };
-      dispatch(updateTodos(taskDetails));
+      const taskDetails = { title: task, description, priority, isCompleted: false };
+      // For local state
+      // dispatch(addTodo(taskDetails));
+      // For server
+      addTodo(taskDetails);
     }
   };
 
@@ -86,7 +94,23 @@ export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAd
                 className="col-span-3"
               />
             </div>
-            <TodoFilter setPriority={setPriority} />
+            {/* <TodoFilter setPriority={setPriority} /> */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label>Priority</Label>
+              <Select onValueChange={(value) => setPriority(value)}>
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select a fruit" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Priority</SelectLabel>
+                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="low">Low</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <div className="flex justify-end">
             <DialogClose asChild>
