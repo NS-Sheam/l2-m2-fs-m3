@@ -7,9 +7,11 @@ import { useGetTodosQuery } from "@/redux/api/api";
 
 const TodoContainer = () => {
   // from state
-  const { todos } = useAppSelector((state) => state.todos);
+  // const { todos } = useAppSelector((state) => state.todos);
   // from server
-  // const { data: todos, isLoading, isError } = useGetTodosQuery(undefined);
+  const { data, isLoading, isError } = useGetTodosQuery(undefined, { pollingInterval: 1000 });
+  const todos = data?.data;
+
   const [priority, setPriority] = useState("high");
   const priorityTask = todos?.filter((item) => item.priority === priority);
   const remainingTask = todos?.filter((item) => item.priority !== priority);

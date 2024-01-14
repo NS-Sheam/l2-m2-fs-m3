@@ -32,7 +32,6 @@ export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAd
   const { todos } = useAppSelector((state) => state.todos);
   // From server
   const [addTodo, { data, isError, isLoading, isSuccess }] = useAddTodoMutation();
-  console.log(data, isError, isLoading, isSuccess);
 
   const todo = todos?.find((item) => item.id === id);
   const [priority, setPriority] = useState();

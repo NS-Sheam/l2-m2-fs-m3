@@ -5,22 +5,24 @@ export const baseApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5000",
   }),
+  tagTypes: ["todo"],
   endpoints: (builder) => ({
     getTodos: builder.query({
       query: () => ({
         url: "/tasks",
         method: "GET",
       }),
+      providesTags: ["todo"],
     }),
     addTodo: builder.mutation({
       query: (data) => {
-        console.log(data);
         return {
           url: "/task",
           method: "POST",
           body: data,
         };
       },
+      invalidatesTags: ["todo"],
     }),
   }),
 });
