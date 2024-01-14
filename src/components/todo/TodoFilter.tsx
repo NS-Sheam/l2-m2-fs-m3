@@ -14,7 +14,7 @@ type TodoFilterProps = {
   setPriority: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const TodoFilter = ({ setPriority }: TodoFilterProps) => {
+const TodoFilter = ({ priority, setPriority }: TodoFilterProps) => {
   const [position, setPosition] = useState("bottom");
   return (
     <DropdownMenu>

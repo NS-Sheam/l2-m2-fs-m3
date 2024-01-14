@@ -9,10 +9,10 @@ const TodoContainer = () => {
   // from state
   // const { todos } = useAppSelector((state) => state.todos);
   // from server
-  const { data, isLoading, isError } = useGetTodosQuery(undefined, { pollingInterval: 1000 });
+  const [priority, setPriority] = useState("");
+  const { data, isLoading, isError } = useGetTodosQuery(priority);
   const todos = data?.data;
 
-  const [priority, setPriority] = useState("high");
   const priorityTask = todos?.filter((item) => item.priority === priority);
   const remainingTask = todos?.filter((item) => item.priority !== priority);
   return (
@@ -23,7 +23,10 @@ const TodoContainer = () => {
           modalTitle="Add Todo"
           modalDescription="Add todo as you want..."
         />
-        <TodoFilter setPriority={setPriority} />
+        <TodoFilter
+          priority={priority}
+          setPriority={setPriority}
+        />
       </div>
       <div className="bg-primary-gradient w-full h-full rounded-xl p-[5px]">
         {!todos?.length && (
