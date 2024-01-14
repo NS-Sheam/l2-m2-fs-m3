@@ -2,20 +2,26 @@ import { useAppDispatch } from "@/redux/hook";
 import { Button } from "../ui/button";
 import { removeTodo, toggleComplete } from "@/redux/features/todoSlice";
 import { AddTodoModal } from "./AddTodoModal";
+import { useUpdateTodoMutation } from "@/redux/api/api";
 
 type TodoCardProps = {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   isCompleted?: boolean;
   priority: string;
 };
 
-const TodoCard = ({ id, title, description, isCompleted, priority }: TodoCardProps) => {
-  const dispatch = useAppDispatch();
-
+const TodoCard = ({ _id, title, description, isCompleted, priority }: TodoCardProps) => {
+  // const dispatch = useAppDispatch();
+  const [updateTodo, { isError, isLoading, isSuccess }] = useUpdateTodoMutation();
   const toggleState = () => {
-    dispatch(toggleComplete(id));
+    const taskData = { title, description, isCompleted: !isCompleted, priority };
+    const options = { id: _id, data: taskData };
+
+    updateTodo(options);
+
+    // dispatch(toggleComplete(id));
   };
   return (
     <div className="bg-white rounded-md flex justify-between items-center p-3 border">
@@ -23,6 +29,7 @@ const TodoCard = ({ id, title, description, isCompleted, priority }: TodoCardPro
         className="mr-3"
         onChange={toggleState}
         type="checkbox"
+        defaultChecked={isCompleted}
         name=""
         id=""
       />
@@ -47,7 +54,7 @@ const TodoCard = ({ id, title, description, isCompleted, priority }: TodoCardPro
       <p className="flex-[2]">{description}</p>
       <div className="space-x-5">
         <Button
-          onClick={() => dispatch(removeTodo(id))}
+          // onClick={() => dispatch(removeTodo(id))}
           className="bg-red-500"
         >
           <svg
@@ -66,7 +73,7 @@ const TodoCard = ({ id, title, description, isCompleted, priority }: TodoCardPro
           </svg>
         </Button>
         <AddTodoModal
-          id={id}
+          // id={id}
           modalTitle="Edit Todo"
           modalDescription="Edit todo as you want..."
         >
