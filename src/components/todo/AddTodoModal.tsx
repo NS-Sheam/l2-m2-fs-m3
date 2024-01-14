@@ -11,10 +11,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 // import { addTodo, updateTodos } from "@/redux/features/todoSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { FormEvent, useState } from "react";
-import TodoFilter from "./TodoFilter";
-import { useAddTodoMutation } from "@/redux/api/api";
+import { TTodo, useAddTodoMutation, useGetTodosQuery } from "@/redux/api/api";
 import { Select, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { SelectContent, SelectLabel } from "@radix-ui/react-select";
 
@@ -29,12 +27,15 @@ export function AddTodoModal({ id, modalTitle, modalDescription, children }: TAd
   const [task, setTask] = useState("");
   const [description, setDescription] = useState("");
   // From local state
-  const { todos } = useAppSelector((state) => state.todos);
+  // const { todos } = useAppSelector((state) => state.todos);
+  const { data } = useGetTodosQuery("");
+  const todos: TTodo[] = data?.data;
   // From server
-  const [addTodo, { data, isError, isLoading, isSuccess }] = useAddTodoMutation();
+  const [addTodo] = useAddTodoMutation();
 
-  const todo = todos?.find((item) => item.id === id);
-  const [priority, setPriority] = useState();
+  const todo = todos?.find((item) => item._id === id);
+
+  const [priority, setPriority] = useState("");
 
   // const dispatch = useAppDispatch();
 

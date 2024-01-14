@@ -1,6 +1,5 @@
-import { useAppDispatch } from "@/redux/hook";
 import { Button } from "../ui/button";
-import { removeTodo, toggleComplete } from "@/redux/features/todoSlice";
+
 import { AddTodoModal } from "./AddTodoModal";
 import { useUpdateTodoMutation } from "@/redux/api/api";
 
@@ -14,7 +13,7 @@ type TodoCardProps = {
 
 const TodoCard = ({ _id, title, description, isCompleted, priority }: TodoCardProps) => {
   // const dispatch = useAppDispatch();
-  const [updateTodo, { isError, isLoading, isSuccess }] = useUpdateTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
   const toggleState = () => {
     const taskData = { title, description, isCompleted: !isCompleted, priority };
     const options = { id: _id, data: taskData };
@@ -73,7 +72,7 @@ const TodoCard = ({ _id, title, description, isCompleted, priority }: TodoCardPr
           </svg>
         </Button>
         <AddTodoModal
-          // id={id}
+          id={_id}
           modalTitle="Edit Todo"
           modalDescription="Edit todo as you want..."
         >

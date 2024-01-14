@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+export type TTodo = {
+  _id: string;
+  title: string;
+  description: string;
+  priority: string;
+  isCompleted?: boolean;
+};
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: fetchBaseQuery({
